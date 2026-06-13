@@ -1,5 +1,7 @@
 package com.example.inventory_management.service.Impl;
 
+import com.example.inventory_management.exception.EmployeeValidationException;
+import com.example.inventory_management.exception.ProductNotFoundException;
 import com.example.inventory_management.model.Product;
 import com.example.inventory_management.repository.ProductRepository;
 import com.example.inventory_management.service.ProductService;
@@ -18,26 +20,41 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product createProduct(Product product) {
-        return null;
+        if (product.getPrice() == null) {
+            throw new EmployeeValidationException("Product price cannot be null");
+        }
+        Product prod = new Product();
+        prod.setId(product.getId());
+        prod.setName(product.getName());
+        prod.setPrice(product.getPrice());
+        return repository.save(prod);
     }
 
     @Override
     public List<Product> getAllProducts() {
-        return List.of();
+        return repository.findAll();
     }
 
     @Override
     public Product getProductById(Long id) {
-        return null;
+        return repository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product " + id + " was not found"));
     }
 
     @Override
-    public Product updateProduct(Long id) {
-        return null;
+    public Product updateProduct(Long id, Product product) {
+        Product prod = getProductById(id);
+        if (prod.getPrice() == null) {
+            throw new EmployeeValidationException("Product price cannot be null");
+        }
+        prod.setPrice(product.getPrice());
+        prod.setName(product.getName());
+        return repository.save(prod);
     }
 
     @Override
     public void deleteProduct(Long id) {
+        Product prod = getProductById(id);
+        repository.delete(prod);
 
     }
 }
