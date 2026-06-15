@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class ProductController {
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
     @PostMapping
-    public ResponseEntity<Product> create(@Validated @RequestBody Product prod) {
+    public ResponseEntity<Product> create(@Valid @RequestBody Product prod) {
         log.info("POST /product called");
         Product created = service.createProduct(prod);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
