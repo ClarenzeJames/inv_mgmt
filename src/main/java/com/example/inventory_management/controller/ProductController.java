@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
@@ -19,15 +21,18 @@ public class ProductController {
     public ProductController(ProductService service) {
         this.service = service;
     }
+    private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
     @PostMapping
     public ResponseEntity<Product> create(@Validated @RequestBody Product prod) {
+        log.info("POST /product called");
         Product created = service.createProduct(prod);
         return new ResponseEntity<>(created, HttpStatus.CREATED);
     }
 
     @GetMapping
     public ResponseEntity<List<Product>> list() {
+        log.info("GET /product called");
         List<Product> products = service.getAllProducts();
         return ResponseEntity.ok(products);
     }
