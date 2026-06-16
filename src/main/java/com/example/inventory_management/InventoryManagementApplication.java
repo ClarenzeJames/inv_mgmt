@@ -9,7 +9,7 @@ public class InventoryManagementApplication {
     public static void main(String[] args) {
 
         SpringApplication.run(InventoryManagementApplication.class, args);
-        System.out.println("Second Commit");
+        System.out.println("Third commit");
     }
 
 }
