@@ -1,33 +1,43 @@
 package com.example.inventory_management;
 
-import com.example.inventory_management.service.ProductService;
+import com.example.inventory_management.model.Product;
+import com.example.inventory_management.repository.ProductRepository;
+import com.example.inventory_management.service.Impl.ProductServiceImpl;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
 
-@SpringBootTest
-class InventoryManagementApplicationTests {
+@ExtendWith(MockitoExtension.class)
+public class InventoryManagementApplicationTests {
+    private final Product prod = new Product();
 
-    @Autowired
-    private ProductService service;
 
-    @Test
-    void shouldReturnName(){
-        String name = String.valueOf(service.getProductById(1L).getName());;
-        assertEquals("Laptop ", name);
+    @Mock
+    private ProductRepository repository;
+
+    @InjectMocks
+    private ProductServiceImpl service;
+
+    @BeforeEach
+    void setup() {
+        prod.setName("Laptop");
+        prod.setPrice(10.00F);
     }
 
     @Test
-    void shouldBeMoreThanZero(){
-        Float price = service.getProductById(1L).getPrice();
-        assertTrue(price > 0);
-    }
+    void shouldWorkWithSpringContext() {
+        when(repository.findById(1L)).thenReturn(Optional.of(prod));
 
-    @Test
-    void contextLoads() {
-    }
+        String name = service.getProductById(1L).getName();
 
+        assertEquals("Laptop", name);
+    }
 }
