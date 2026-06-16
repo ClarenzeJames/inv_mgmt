@@ -2,6 +2,8 @@ package com.example.inventory_management.controller;
 
 import com.example.inventory_management.model.Product;
 import com.example.inventory_management.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -16,6 +18,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/product")
+@Tag(name = "Product API", description = "Operations related to the Product")
 public class ProductController {
     private final ProductService service;
 
@@ -25,6 +28,7 @@ public class ProductController {
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
     @PostMapping
+    @Operation(summary = "Operations related to creating product")
     public ResponseEntity<Product> create(@Valid @RequestBody Product prod) {
         log.info("POST /product called");
         Product created = service.createProduct(prod);
@@ -32,6 +36,7 @@ public class ProductController {
     }
 
     @GetMapping
+    @Operation(summary = "Operations related to getting all product")
     public ResponseEntity<List<Product>> list() {
         log.info("GET /product called");
         List<Product> products = service.getAllProducts();
@@ -39,6 +44,7 @@ public class ProductController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Operations related to getting one product by ID")
     public ResponseEntity<Product> getById(@PathVariable Long id) {
         Product prod = service.getProductById(id);
         return ResponseEntity.ok(prod);
@@ -46,12 +52,14 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Operations related to updating product")
     public ResponseEntity<Product> updateProduct(@PathVariable Long id, @Validated @RequestBody Product prod) {
         Product newProd = service.updateProduct(id, prod);
         return ResponseEntity.ok(newProd);
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Operations related to deleting product")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.deleteProduct(id);
         return ResponseEntity.noContent().build();
