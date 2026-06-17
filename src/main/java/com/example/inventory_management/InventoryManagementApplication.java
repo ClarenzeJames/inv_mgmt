@@ -19,7 +19,7 @@ public class InventoryManagementApplication {
     public static void main(String[] args) {
 
         SpringApplication.run(InventoryManagementApplication.class, args);
-        System.out.println("Third commit");
+        System.out.println("Inventory Management System is now working");
     }
 
 }

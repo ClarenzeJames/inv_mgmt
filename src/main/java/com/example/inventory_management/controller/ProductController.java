@@ -4,11 +4,8 @@ import com.example.inventory_management.model.Product;
 import com.example.inventory_management.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.apache.coyote.Response;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
@@ -46,6 +43,7 @@ public class ProductController {
     @GetMapping("/{id}")
     @Operation(summary = "Operations related to getting one product by ID")
     public ResponseEntity<Product> getById(@PathVariable Long id) {
+        log.info("GET /product/{id} called");
         Product prod = service.getProductById(id);
         return ResponseEntity.ok(prod);
 
@@ -53,7 +51,8 @@ public class ProductController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Operations related to updating product")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @Validated @RequestBody Product prod) {
+    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @Valid @RequestBody Product prod) {
+        log.info("PUT /product/{id} called");
         Product newProd = service.updateProduct(id, prod);
         return ResponseEntity.ok(newProd);
     }
@@ -61,6 +60,7 @@ public class ProductController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Operations related to deleting product")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
+        log.info("DELETE /product/{id} called");
         service.deleteProduct(id);
         return ResponseEntity.noContent().build();
     }

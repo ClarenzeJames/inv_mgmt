@@ -4,10 +4,9 @@ import com.example.inventory_management.exception.ProductNotFoundException;
 import com.example.inventory_management.model.Product;
 import com.example.inventory_management.repository.ProductRepository;
 import com.example.inventory_management.service.ProductService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
