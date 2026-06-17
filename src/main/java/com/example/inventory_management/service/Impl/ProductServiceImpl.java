@@ -1,6 +1,5 @@
 package com.example.inventory_management.service.Impl;
 
-import com.example.inventory_management.exception.EmployeeValidationException;
 import com.example.inventory_management.exception.ProductNotFoundException;
 import com.example.inventory_management.model.Product;
 import com.example.inventory_management.repository.ProductRepository;
@@ -21,10 +20,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product createProduct(Product product) {
         if (product.getPrice() == null) {
-            throw new EmployeeValidationException("Product price cannot be null");
+            throw new ProductNotFoundException("Product price cannot be null");
         }
         Product prod = new Product();
-        prod.setId(product.getId());
+
         prod.setName(product.getName());
         prod.setPrice(product.getPrice());
         return repository.save(prod);
@@ -43,8 +42,10 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product updateProduct(Long id, Product product) {
         Product prod = getProductById(id);
-        if (prod.getPrice() == null) {
-            throw new EmployeeValidationException("Product price cannot be null");
+
+        // Checks the incoming request body if price is null
+        if (product.getPrice() == null) {
+            throw new ProductNotFoundException("Product price cannot be null");
         }
         prod.setPrice(product.getPrice());
         prod.setName(product.getName());
