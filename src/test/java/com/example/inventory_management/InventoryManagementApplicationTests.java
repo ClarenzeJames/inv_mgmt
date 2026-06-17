@@ -12,14 +12,17 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class InventoryManagementApplicationTests {
     private final Product prod = new Product();
+    private final Product savedProduct = new Product();
 
 
     @Mock
@@ -31,7 +34,10 @@ public class InventoryManagementApplicationTests {
     @BeforeEach
     void setup() {
         prod.setName("Laptop");
-        prod.setPrice(BigDecimal.valueOf(10));
+        prod.setPrice(BigDecimal.valueOf(10).setScale(2, RoundingMode.HALF_UP));
+
+        savedProduct.setName("Laptop");
+        savedProduct.setPrice(BigDecimal.valueOf(10).setScale(2, RoundingMode.HALF_UP));
     }
 
     @Test
@@ -41,5 +47,13 @@ public class InventoryManagementApplicationTests {
         String name = service.getProductById(1L).getName();
 
         assertEquals("Laptop", name);
+    }
+
+    @Test
+    void createProduct_shouldSaveAndReturnProduct() {
+        when(repository.save(prod)).thenReturn(savedProduct);
+
+        Product result = service.createProduct(prod);
+        Mockito.verify(repository, times(1)).save(prod);
     }
 }
