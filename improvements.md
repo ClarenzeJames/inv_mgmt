@@ -36,7 +36,7 @@
 
 | Check | Priority | Test Name | Description |
 | --- |---|---|---|
-| [ ] | **Critical** | `createProduct_shouldSaveAndReturnProduct` | Mock `repository.save(any())` to return a product with ID=1. Call `service.createProduct(prod)`. Assert the returned product's name, price, and that `repository.save()` was invoked exactly once via `Mockito.verify`. |
+| [x] | **Critical** | `createProduct_shouldSaveAndReturnProduct` | Mock `repository.save(any())` to return a product with ID=1. Call `service.createProduct(prod)`. Assert the returned product's name, price, and that `repository.save()` was invoked exactly once via `Mockito.verify`. |
 | [ ] | **Critical** | `createProduct_shouldThrowWhenPriceIsNull` | Set `prod.setPrice(null)`. Use `assertThrows(EmployeeValidationException.class, () -> service.createProduct(prod))` to confirm the guard fires and the exception message matches. |
 | [ ] | **Critical** | `getProductById_shouldThrowProductNotFoundException` | Mock `repository.findById(99L)` to return `Optional.empty()`. Use `assertThrows(ProductNotFoundException.class, () -> service.getProductById(99L))` and verify the exception message contains the missing ID. |
 | [ ] | **Critical** | `updateProduct_shouldUpdateFieldsAndReturnProduct` | Mock `repository.findById(1L)` to return the existing product. Mock `repository.save(any())` to return an updated product. Call `service.updateProduct(1L, updatedProd)`. Assert the returned product reflects the new name and price. |

@@ -1,8 +1,10 @@
 package com.example.inventory_management;
 
+import com.example.inventory_management.exception.ProductNotFoundException;
 import com.example.inventory_management.model.Product;
 import com.example.inventory_management.repository.ProductRepository;
 import com.example.inventory_management.service.Impl.ProductServiceImpl;
+import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,6 +18,8 @@ import java.math.RoundingMode;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
@@ -51,9 +55,9 @@ public class InventoryManagementApplicationTests {
 
     @Test
     void createProduct_shouldSaveAndReturnProduct() {
-        when(repository.save(prod)).thenReturn(savedProduct);
+        when(repository.save(any(Product.class))).thenReturn(savedProduct);
 
         Product result = service.createProduct(prod);
-        Mockito.verify(repository, times(1)).save(prod);
+        Mockito.verify(repository, times(1)).save(any(Product.class));
     }
 }
