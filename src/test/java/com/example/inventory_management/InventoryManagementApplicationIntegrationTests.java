@@ -7,7 +7,6 @@ import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -53,9 +52,9 @@ class InventoryManagementApplicationIntegrationTests {
     @Test
     void getProductById_shouldThrowProductNotFoundException() {
         // Check if it throws a ProductNotFoundException
-        assertThrows(ProductNotFoundException.class,() -> {
-            service.getProductById(99999L);
-        });
+        assertThrows(ProductNotFoundException.class,() ->
+            service.getProductById(99999L)
+        );
     }
 
     @Test
@@ -79,24 +78,50 @@ class InventoryManagementApplicationIntegrationTests {
         // Deleting product
         service.deleteProduct(createdProduct.getId());
         // This should throw a ProductNotFoundException since we deleted it
-        assertThrows(ProductNotFoundException.class,() -> {
-            service.getProductById(createdProduct.getId());
-        });
+        assertThrows(ProductNotFoundException.class,() ->
+            service.getProductById(createdProduct.getId())
+        );
     }
 
     @Test
-    /**
-     * This test asserts that a "ConstraintViolationException" is thrown when the name is blank.
-     * The exception is thrown as it is a Bean validation via the "@Valid" annotation
-     */
     void createProduct_shouldThrowWhenNameIsBlank() {
         //Create a new Product
         Product newProd = new Product();
         newProd.setPrice(BigDecimal.valueOf(200).setScale(2, RoundingMode.HALF_UP));
         newProd.setName("");
-        assertThrows(ConstraintViolationException.class, () -> {
-            service.createProduct(newProd);
-        });
+        assertThrows(ConstraintViolationException.class, () ->
+            service.createProduct(newProd)
+        );
+    }
+
+    @Test
+    void createProduct_shouldThrowWhenPriceIsNegative() {
+        // create a new Product
+        Product newProd = new Product();
+        newProd.setPrice(BigDecimal.valueOf(-2).setScale(2, RoundingMode.HALF_UP));
+        newProd.setName("Negative");
+        assertThrows(ConstraintViolationException.class, () ->
+            service.createProduct(newProd)
+        );
+    }
+
+    @Test
+    void updateProduct_shouldThrowWhenProductNotFound() {
+        // create a new Product
+        Product newProd = new Product();
+        newProd.setPrice(BigDecimal.valueOf(20).setScale(2, RoundingMode.HALF_UP));
+        newProd.setName("UpdateTest");
+        newProd.setName("newUpdatedTest");
+        assertThrows(ProductNotFoundException.class, () ->
+            service.updateProduct(99999L, newProd)
+        );
+    }
+
+    @Test
+    void deleteProduct_shouldThrowWhenProductNotFound() {
+        assertThrows(ProductNotFoundException.class, () ->
+            service.deleteProduct(9999L)
+        );
     }
 
     // -------------------------------
