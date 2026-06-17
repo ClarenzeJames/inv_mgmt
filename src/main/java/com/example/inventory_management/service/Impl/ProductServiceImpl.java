@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.RoundingMode;
 import java.util.List;
 
 @Service
@@ -24,7 +25,7 @@ public class ProductServiceImpl implements ProductService {
         Product prod = new Product();
 
         prod.setName(product.getName());
-        prod.setPrice(product.getPrice());
+        prod.setPrice(product.getPrice().setScale(2, RoundingMode.HALF_UP));
         return repository.save(prod);
     }
 
@@ -46,7 +47,7 @@ public class ProductServiceImpl implements ProductService {
         if (product.getPrice() == null) {
             throw new ProductNotFoundException("Product price cannot be null");
         }
-        prod.setPrice(product.getPrice());
+        prod.setPrice(product.getPrice().setScale(2, RoundingMode.HALF_UP));
         prod.setName(product.getName());
         return repository.save(prod);
     }
@@ -55,6 +56,5 @@ public class ProductServiceImpl implements ProductService {
     public void deleteProduct(Long id) {
         Product prod = getProductById(id);
         repository.delete(prod);
-
     }
 }

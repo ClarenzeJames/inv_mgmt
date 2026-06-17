@@ -1,5 +1,7 @@
+DROP TABLE IF EXISTS inventory
+
 CREATE TABLE inventory (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    price NUMERIC(10, 2) NOT NULL CHECK (price > 0)
+    price DECIMAL(10, 2) NOT NULL CHECK (price > 0)
 );
