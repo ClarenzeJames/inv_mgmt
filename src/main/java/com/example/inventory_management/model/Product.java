@@ -4,7 +4,6 @@ package com.example.inventory_management.model;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -20,7 +19,7 @@ import java.math.BigDecimal;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    @Schema(description = "Product ID", example = "1")
+    @Schema(description = "Product ID", example = "1")
     private Long id;
 
     @Column(nullable = false)

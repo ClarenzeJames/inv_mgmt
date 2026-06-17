@@ -1,5 +1,5 @@
 CREATE TABLE inventory (
-    id BIGSERIAL PRIMARY KEY,
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     price NUMERIC(10, 2) NOT NULL CHECK (price > 0)
 );

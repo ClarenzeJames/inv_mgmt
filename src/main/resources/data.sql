@@ -1,1 +1,1 @@
-INSERT INTO inventory (name, price) VALUES ('Laptop ', '10.00');
+INSERT INTO inventory (name, price) VALUES ('Laptop', '10.00');
