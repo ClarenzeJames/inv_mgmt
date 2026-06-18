@@ -11,10 +11,13 @@ public class ProductMapper {
      * @return Product entities
      */
     public static Product toEntity(ProductRequestDTO dto) {
-        Product prod = new Product();
-        prod.setName(dto.getName());
-        prod.setPrice(dto.getPrice().setScale(2, RoundingMode.HALF_UP));
-        return prod;
+//        Product prod = new Product();
+//        prod.setName(dto.getName());
+//        prod.setPrice(dto.getPrice().setScale(2, RoundingMode.HALF_UP));
+        return Product.builder()
+                .name(dto.getName())
+                .price(dto.getPrice().setScale(2, RoundingMode.HALF_UP))
+                .build();
     }
 
     /**
@@ -23,9 +26,12 @@ public class ProductMapper {
      * @return Response DTOs
      */
     public static ProductResponseDTO toResponseDTO (Product prod) {
-        ProductResponseDTO responseDTO = new ProductResponseDTO();
-        responseDTO.setName(prod.getName());
-        responseDTO.setPrice(prod.getPrice());
-        return responseDTO;
+//        ProductResponseDTO responseDTO = new ProductResponseDTO();
+//        responseDTO.setName(prod.getName());
+//        responseDTO.setPrice(prod.getPrice());
+        return ProductResponseDTO.builder()
+                .name(prod.getName())
+                .price(prod.getPrice().setScale(2, RoundingMode.HALF_UP))
+                .build();
     }
 }
