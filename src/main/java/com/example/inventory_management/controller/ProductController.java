@@ -1,5 +1,8 @@
 package com.example.inventory_management.controller;
 
+import com.example.inventory_management.DTO.ProductMapper;
+import com.example.inventory_management.DTO.ProductRequestDTO;
+import com.example.inventory_management.DTO.ProductResponseDTO;
 import com.example.inventory_management.model.Product;
 import com.example.inventory_management.service.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,37 +27,69 @@ public class ProductController {
     }
     private static final Logger log = LoggerFactory.getLogger(ProductController.class);
 
+    /**
+     * Takes in request DTO (automapped by Jackson)
+     * @param requestDTO the product object that we want to be inserted
+     * @return returns the same requestDTO, if we return the actual object, then we will return the ID also.
+     */
     @PostMapping
     @Operation(summary = "Operations related to creating product")
-    public ResponseEntity<Product> create(@Valid @RequestBody Product prod) {
-        log.info("POST /product called");
-        Product created = service.createProduct(prod);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+    public ResponseEntity<ProductRequestDTO> create(@Valid @RequestBody ProductRequestDTO requestDTO) {
+
+        service.createProduct(ProductMapper.toEntity(requestDTO));
+        return new ResponseEntity<>(requestDTO, HttpStatus.CREATED);
     }
 
+    /**
+     * This function gets all the products from service.getAllProducts(), streams and maps it to ProductMapper::toResponseDTO
+     * and then toList()
+     * @return List of responseDTOs
+     */
     @GetMapping
     @Operation(summary = "Operations related to getting all product")
-    public ResponseEntity<List<Product>> list() {
+    public ResponseEntity<List<ProductResponseDTO>> list() {
         log.info("GET /product called");
-        List<Product> products = service.getAllProducts();
-        return ResponseEntity.ok(products);
+        List<ProductResponseDTO> responseDTOs = service.getAllProducts()
+                .stream()
+                .map(ProductMapper::toResponseDTO)
+                .toList();
+        return ResponseEntity.ok(responseDTOs);
     }
+//    public ResponseEntity<List<Product>> list() {
+//        log.info("GET /product called");
+//        List<Product> products = service.getAllProducts();
+//        return ResponseEntity.ok(products);
+//    }
 
+
+
+    /**
+     * This function takes in an ID, searches the database and returns a response DTO
+     * @param id id of product
+     * @return responseDTO
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Operations related to getting one product by ID")
-    public ResponseEntity<Product> getById(@PathVariable Long id) {
+    public ResponseEntity<ProductResponseDTO> getById(@PathVariable Long id) {
         log.info("GET /product/{id} called");
-        Product prod = service.getProductById(id);
-        return ResponseEntity.ok(prod);
+        ProductResponseDTO responseDTO = ProductMapper.toResponseDTO(service.getProductById(id));
+        return ResponseEntity.ok(responseDTO);
 
     }
 
+    /**
+     * This function takes in an ID, and a product object, searches the database, updates the product record
+     * and returns a response DTO
+     * @param id id of product
+     * @param prod product object with values inserted
+     * @return responseDTO
+     */
     @PutMapping("/{id}")
     @Operation(summary = "Operations related to updating product")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @Valid @RequestBody Product prod) {
+    public ResponseEntity<ProductResponseDTO> updateProduct(@PathVariable Long id, @Valid @RequestBody Product prod) {
         log.info("PUT /product/{id} called");
-        Product newProd = service.updateProduct(id, prod);
-        return ResponseEntity.ok(newProd);
+        ProductResponseDTO responseUpdatedProd = ProductMapper.toResponseDTO(service.updateProduct(id, prod));
+        return ResponseEntity.ok(responseUpdatedProd);
     }
 
     @DeleteMapping("/{id}")
