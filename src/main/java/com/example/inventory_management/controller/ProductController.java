@@ -1,6 +1,7 @@
 package com.example.inventory_management.controller;
 
 import com.example.inventory_management.DTO.ProductMapper;
+import com.example.inventory_management.DTO.ProductPatchDTO;
 import com.example.inventory_management.DTO.ProductRequestDTO;
 import com.example.inventory_management.DTO.ProductResponseDTO;
 import com.example.inventory_management.model.Product;
@@ -90,6 +91,13 @@ public class ProductController {
         log.info("PUT /product/{id} called");
         ProductResponseDTO responseUpdatedProd = ProductMapper.toResponseDTO(service.updateProduct(id, prod));
         return ResponseEntity.ok(responseUpdatedProd);
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Operations related to patching a product record")
+    public ResponseEntity<ProductResponseDTO> patchProduct(@PathVariable Long id, @Valid @RequestBody ProductPatchDTO dto) {
+        log.info("PATCH /product/{id} called");
+        return ResponseEntity.ok(service.patchProduct(id, dto));
     }
 
     @DeleteMapping("/{id}")

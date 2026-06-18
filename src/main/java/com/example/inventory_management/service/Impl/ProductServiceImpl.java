@@ -1,5 +1,8 @@
 package com.example.inventory_management.service.Impl;
 
+import com.example.inventory_management.DTO.ProductMapper;
+import com.example.inventory_management.DTO.ProductPatchDTO;
+import com.example.inventory_management.DTO.ProductResponseDTO;
 import com.example.inventory_management.exception.ProductNotFoundException;
 import com.example.inventory_management.model.Product;
 import com.example.inventory_management.repository.ProductRepository;
@@ -50,6 +53,19 @@ public class ProductServiceImpl implements ProductService {
         prod.setPrice(product.getPrice().setScale(2, RoundingMode.HALF_UP));
         prod.setName(product.getName());
         return repository.save(prod);
+    }
+
+    @Override
+    public ProductResponseDTO patchProduct(Long id, ProductPatchDTO dto) {
+        Product existing = repository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product " + id + " was not found"));
+
+        if(dto.getName() != null) {
+            existing.setName(dto.getName());
+        }
+        if(dto.getPrice() != null) {
+            existing.setPrice(dto.getPrice().setScale(2, RoundingMode.HALF_UP));
+        }
+        return ProductMapper.toResponseDTO(repository.save(existing));
     }
 
     @Override
