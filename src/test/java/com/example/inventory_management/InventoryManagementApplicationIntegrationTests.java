@@ -34,7 +34,7 @@ class InventoryManagementApplicationIntegrationTests {
     @Test
     void createProduct_shouldPersistAndBeRetrievableById() {
         Product newProduct = new Product();
-        newProduct.setPrice(BigDecimal.valueOf(400.0));
+        newProduct.setPrice(BigDecimal.valueOf(400.0).setScale(2, RoundingMode.HALF_UP));
         newProduct.setName("incomingTest");
         Product createdProduct = createAndGetProduct(newProduct);
 
